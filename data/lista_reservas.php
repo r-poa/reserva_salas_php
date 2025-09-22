@@ -1,0 +1,1 @@
+<?php// Abre o banco de dados SQLite$db = new SQLite3('database.sqlite');// Executa a consulta para obter todas as linhas da tabela logins_usuarios$result = $db->query('SELECT * FROM reserva');// Exibe cada linha obtida da tabelawhile ($row = $result->fetchArray(SQLITE3_ASSOC)) {    print_r($row);    echo "\n\n";}?>
