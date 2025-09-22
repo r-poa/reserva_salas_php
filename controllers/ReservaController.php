@@ -83,6 +83,7 @@ class ReservaController extends Controller
     }
 
 
+
 	public function actionCreate($data_do_evento = null)
 	{
 		$model = new \app\models\Reserva();
@@ -96,6 +97,9 @@ class ReservaController extends Controller
 
 		// POST (envio do formulário)
 		if ($request->isPost && $model->load($request->post())) {
+			
+			$model->user_id = Yii::$app->user->id;  //Sugerido pela IA
+
 			if ($model->save()) {
 				if ($request->isAjax) {
 					\Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -103,6 +107,13 @@ class ReservaController extends Controller
 				}
 				return $this->redirect(['view', 'id' => $model->id]);
 			} else {
+				echo "<br><pre>MsG: ";
+				var_dump($model->getErrors()); 
+				echo "USER: "; 
+				var_dump (Yii::$app->id); 
+				
+				exit;
+
 				// validação falhou: se for AJAX, retorna o form com erros (HTML) para injetar no modal
 				if ($request->isAjax) {
 					return $this->renderAjax('create', ['model' => $model]);

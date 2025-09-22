@@ -38,10 +38,7 @@ class Reserva extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['sala_id', 'user_id', 'titulo_evento', 'publico_alvo', 'data_do_evento', 'hora_de_inicio_do_evento', 'hora_final_do_evento', 'evento_publico'], 'required'],
-            [['sala_id', 'user_id'], 'integer'],
-            [['data_do_evento', 'hora_de_inicio_do_evento', 'hora_final_do_evento'], 'safe'],
-            [['titulo_evento', 'publico_alvo', 'evento_publico'], 'string', 'max' => 255],
+            [['titulo_evento',  'data_do_evento', 'hora_de_inicio_do_evento'  ], 'required'],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => LoginsUsuarios::class, 'targetAttribute' => ['user_id' => 'login']],
             [['sala_id'], 'exist', 'skipOnError' => true, 'targetClass' => Sala::class, 'targetAttribute' => ['sala_id' => 'id']],
         ];
@@ -64,6 +61,15 @@ class Reserva extends \yii\db\ActiveRecord
             'evento_publico' => 'Evento Publico',
         ];
     }
+
+
+		public function getDataDoEventoISO()
+		{
+			$date = \DateTime::createFromFormat('d/m/Y', $this->data_do_evento);
+			return $date ? $date->format('Y-m-d') : null;
+		}
+
+
 
     /**
      * Gets query for [[Sala]].

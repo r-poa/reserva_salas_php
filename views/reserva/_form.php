@@ -23,9 +23,34 @@ use app\models\Sala;
 
     <?= $form->field($model, 'publico_alvo')->textInput(['maxlength' => true]) ?>
 
-
-	<?= $form->field($model, 'data_do_evento')->hiddenInput()->label(false) ?>	
+ 
+	<?php  
 	
+	
+	echo $form->field($model, 'user_id')->textInput([
+		'value' => Yii::$app->user->identity->login, // ou ->identity->username para nome do login
+		'readonly' => true,
+	]) 
+	
+	?>
+	
+<?php
+ 
+
+$request = Yii::$app->request;
+
+if ($request->get('data_do_evento') !== null) {
+   echo  $form->field($model, 'data_do_evento')->hiddenInput()->label(false);
+} else {
+    echo    $form->field($model, 'data_do_evento')->input('date', ['value' => $model->dataDoEventoISO]);
+
+}
+
+
+
+?>
+	
+ 
 	<?= $form->field($model, 'hora_de_inicio_do_evento')->input('time') ?>
 	<?= $form->field($model, 'hora_final_do_evento')->input('time') ?>
 

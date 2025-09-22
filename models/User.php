@@ -19,6 +19,35 @@ class User extends \yii\base\BaseObject implements IdentityInterface
     public $accessToken;
     public $isGestor = false;
 
+
+    private static function getUserData($username)
+    {
+        return (new Query())
+            ->select(['login', 'nome', 'e_mail', 'setor'])
+            ->from('logins_usuarios')
+            ->where(['login' => $username])
+            ->one();
+    }
+
+		public static function findIdentity($id)
+		{
+			$userData = self::getUserData($id);
+			if ($userData) {
+				$user = new static($userData);
+				$user->id = $user->login; // Aqui o ID será o login
+				return $user;
+			}
+			return null;
+		}
+
+		public function getId()
+		{
+			return $this->id; // Retorna a string login
+		}
+
+
+
+
     public function autentica_usuario($password)
     {
 		
@@ -53,20 +82,15 @@ class User extends \yii\base\BaseObject implements IdentityInterface
         return false;
     }
 
-    private static function getUserData($username)
-    {
-        return (new Query())
-            ->select(['login', 'nome', 'e_mail', 'setor'])
-            ->from('logins_usuarios')
-            ->where(['login' => $username])
-            ->one();
-    }
 
+/*
+ 
     public static function findIdentity($id)
     {
         $userData = self::getUserData($id);
         return $userData ? new static($userData) : null;
     }
+ */
 
     public static function findIdentityByAccessToken($token, $type = null)
     {
@@ -95,10 +119,7 @@ class User extends \yii\base\BaseObject implements IdentityInterface
         return null;
     }
 
-    public function getId()
-    {
-        return $this->id;
-    }
+ 
 
     public function getAuthKey()
     {
