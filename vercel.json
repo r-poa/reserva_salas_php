@@ -1,0 +1,17 @@
+
+    {
+      "version": 2,
+      "builds": [
+        {
+          "src": "web/index.php",
+          "use": "@vercel/php"
+        }
+      ],
+      "routes": [
+        {
+          "src": "/(.*)",
+          "dest": "/web/index.php"
+        }
+      ]
+    }
+
